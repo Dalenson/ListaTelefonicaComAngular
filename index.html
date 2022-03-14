@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html ng-app="listaTelefonica">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="angular/angular.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<title>Lista Telefônica</title>
+	<style>
+		.jumbotron{
+			width: 500px;
+			margin-left: auto;
+			margin-right: auto; 
+			text-align: center;
+			margin-top: 20px;
+		}
+		.table{
+			margin-top: 20px;
+		}
+		.form-control{
+			width: 300px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.btn-primary{
+			width: 300px;
+			margin-top: 20px;
+		}
+		.selecionado{
+			background-color: yellow;
+		}
+		.negrito{
+			font-weight: bold;
+		}
+		.btn{
+			margin-top: auto;
+			margin-bottom: auto;
+			margin-top: 5px;
+		}
+		.botoes{
+			margin-top: 5px;
+			display: inline-grid;
+		}
+		.alert{
+			width: 300px;
+			height: 60px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.buscar{
+			margin-top: 30px;
+			width: auto;
+			height: auto;
+			marin:  auto;
+			border-style: unset;
+		}
+		.cabecalho{
+			background-color: #dddddd;
+		}
+	</style>
+	<script>
+		var modulo = angular.module("listaTelefonica", []);
+		modulo.controller("listaTelefonicaController", function ($scope){
+			$scope.app = "Lista Telefônica";
+
+			$scope.contatos = [
+				{nome:"Pedro", telefone:"999999", data: new Date()},
+				{nome:"Joao", telefone:"88888", data: new Date()},
+				{nome:"Ana", telefone:"77777", data: new Date()}
+			];
+
+			$scope.operadoras = [
+				{nome: 'TIM', codigo: 13, categoria: "Celular"},
+				{nome: 'VIVO', codigo: 14, categoria: "Celular"},
+				{nome: 'OI', codigo: 15, categoria: "Fixo"}
+			];
+
+			//Angular cria o contato de forma automatica. Para quebra o ciclo pode ser utilizado  o 'angular.copy' ou realizar o delete do objeto contato. Caso contrario ele irá atualizar o objeto dentro da tabela.
+			$scope.adicionarContado = function (contato){
+				$scope.contatos.push(angular.copy(contato));
+				delete $scope.contato;
+				$scope.contatoForm.$setPristine();
+			};
+			//Filtra dentro do array apenas os contatos onde que não estão selecionados e substitui pelo array de contatos. Deixando apenas os que não deveriam ser apagados.
+			$scope.apagarContatos = function(contatos){
+				$scope.contatos = contatos.filter(function (contato){
+					if (!contato.selecionado) return contato;
+				});
+			};
+			//Retorna true ou false caso exista algum contato com a variavel selecionado. Para validação no NG-DISABLED.
+			$scope.isContatoSelecionado = function(contatos){
+				return contatos.some(function (contato){
+					return contato.selecionado;
+				});
+			};
+			$scope.ordernarPor = function(campo){
+				$scope.criteriodeordenacao = campo;
+				$scope.direcaoordem = !$scope.direcaoordem;
+			};
+		});
+	</script>
+</head>
+<body ng-controller="listaTelefonicaController">
+	<div class="jumbotron">
+		<h4 class="cabecalho">{{app}}</h4>
+		<div class="form-control buscar">
+			<h5>Busca na tabela</h5>
+			<input class="form-control" type="text" ng-model="busca" placeholder="Buscar">
+		</div>
+		<table class="table table-striped">
+			<tr>
+				<th></th>
+				<th><a href="" ng-click="ordernarPor('nome')">Nome</a> </th>
+				<th><a href="" ng-click="ordernarPor('telefone')">Telefone</a></th>
+				<th><a href="" ng-click="ordernarPor('operadora')">Operadora</a></th>
+				<th><a href="" ng-click="ordernarPor('data')">Data</a></th>
+			</tr>
+			<!-- 1° Forma de NG-REPEAT -->
+			<tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" ng-repeat="contato in contatos | filter: busca | orderBy: criteriodeordenacao: true">
+				<td><input type="checkbox" ng-model="contato.selecionado"/></td>
+				<!-- Utilizando formatação para letras maisculas -->
+				<td>{{contato.nome | uppercase}}</td>
+				<td>{{contato.telefone}}</td>
+				<!-- Utilizando formatação para letras minusculas -->
+				<td>{{contato.operadora.nome | lowercase}}</td>
+				<!-- Utilizando formação na data -->
+				<td>{{contato.data | date:'dd/MM/yyyy HH:mm'}}</td>
+			</tr>
+		</table>
+
+		<hr/>
+		<form name="contatoForm">
+			<input class="form-control" type="text" name="nome" ng-model="contato.nome" placeholder="Nome" ng-required="true">
+			<input class="form-control" type="text" name="telefone" ng-model="contato.telefone" placeholder="telefone" ng-required="true">
+			<!-- NG-OPTION agrupamento e criação de objeto dentro de contato -->
+			<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras">
+				<option value="">Selecione uma operadora</option>
+			</select>
+		</form>
+		<div ng-show="contatoForm.nome.$invalid && contatoForm.nome.$dirty" class="alert alert-danger">
+			Por favor, preencha o nome!
+		</div>
+		<div ng-show="contatoForm.telefone.$invalid && contatoForm.telefone.$dirty" class="alert alert-danger">
+			Por favor, preencha o telefone!
+		</div>
+		<!-- NG-DISABLED com expressão para desativar botão -->
+		<div class="botoes">
+			<button ng-click="adicionarContado(contato)" class="btn btn-primary" ng-disabled="contatoForm.$invalid">Salvar</button>
+			<button ng-click="apagarContatos(contatos)" class="btn btn-danger" ng-disabled="!isContatoSelecionado(contatos)">Apagar Contatos</button>
+		</div>
+	</div>
+</body>
+</html>
