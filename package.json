@@ -1,23 +1,25 @@
 {
-  "name": "gamejq",
+  "name": "tempo",
   "version": "1.0.0",
-  "description": "Game Jq",
-  "main": "server.js",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node serve.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dalenson/ListaTelefonicaComAngular.git"
+    "url": "git+https://github.com/Dalenson/ListaTelefonicaComAngular"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Dalenson/ListaTelefonicaComAngular/issues"
   },
-  "homepage": "https://github.com/Dalenson/ListaTelefonicaComAngular#readme",
-  "dependencies": {
-    "express": "^4.18.2"
+  "homepage": "https://github.com/Dalenson/ListaTelefonicaComAngular#README",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }
