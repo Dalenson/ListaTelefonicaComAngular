@@ -25,3 +25,6 @@ Utilizando metodos como:
 * ng-disabled
 * ng-required
 * ng-controller
+
+
+![image](https://user-images.githubusercontent.com/108817919/197064614-9cfa4a37-f686-46ba-80f5-8afa44f2b614.png)
