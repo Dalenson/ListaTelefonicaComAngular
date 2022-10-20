@@ -1,0 +1,20 @@
+{
+  "name": "gamejq",
+  "version": "1.0.0",
+  "description": "Game Jq",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dalenson/ListaTelefonicaComAngular.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dalenson/ListaTelefonicaComAngular/issues"
+  },
+  "homepage": "https://github.com/Dalenson/ListaTelefonicaComAngular#readme"
+}
